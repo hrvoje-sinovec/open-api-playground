@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Discriminator Demo
+  version: 1.0.0
+
+paths:
+  /class:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterClass'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterClass'
+
+components:
+  schemas:
+    CharacterClass:
+      oneOf:
+        - $ref: '#/components/schemas/Barbarian'
+        - $ref: '#/components/schemas/Wizard'
+      discriminator:
+        propertyName: gender
+        mapping:
+          MALE_BARBARIAN: '#/components/schemas/Barbarian'
+          FEMALE_BARBARIAN: '#/components/schemas/Barbarian'
+          MALE_WIZARD: '#/components/schemas/Wizard'
+          FEMALE_WIZARD: '#/components/schemas/Wizard'
+      additionalProperties: false
+
+
+    Barbarian:
+      type: object
+      properties:
+        gender:
+          type: string
+        jaw-strength:
+          type: integer
+
+    Wizard:
+      type: object
+      properties:
+        gender:
+          type: string
+        mana:
+          type: integer
